@@ -1,26 +1,58 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import * as internal from 'stream';
 import {ConfirmationService} from 'primeng/api';
+import { Line, Song } from './models';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit{
   title?: string;
   lines : CustomLine[] = [];
   sections: string[] = ["section1","section2","section3"];
   selectedSection?: string;
 
-
   chordType = ChordType;
   lastLineSelected?: CustomLine;
 
+  dynamicDownload?: HTMLElement;
+
   constructor(private confirmationService: ConfirmationService){}
+
+  ngOnInit(): void {
+    this.dynamicDownload = document.createElement('a');
+    
+  }
+
+  downloadJson(): void {
+    let song = this.createSong();
+    this.dynamicDownload?.setAttribute('href',`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(song))}`);
+    let filename = this.title!=undefined ? this.title?.trim().replace(/ +/g,"-") : 'custon-song';
+    this.dynamicDownload?.setAttribute('download',`${filename}.json`);
+
+    var event = new MouseEvent("click");
+    this.dynamicDownload?.dispatchEvent(event);
+  }
 
   setLastLineSelected(line?: CustomLine): void{
     this.lastLineSelected = line;
+  }
+
+  createSong(): Song{
+    let song = new Song();
+
+    song.title = this.title;
+    song.section = this.selectedSection;
+    song._partition = "PUBLIC";
+    song.body = [];
+    for (let i=0 ; i<this.lines.length ; i++) {
+      let customLine = this.lines[i];
+      song.body.push(new Line(i+1,customLine.type,customLine.content));
+    }
+
+    return song;
   }
 
   addNextLine(idLine: number,text:string,type: ChordType){
@@ -48,6 +80,10 @@ export class EditorComponent {
   }
 
   createLinesFromClipboard(): void{
+    // Firefox -> Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0
+    // Chrome -> Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 
+    console.log(window.navigator.userAgent);
+   
     navigator.clipboard.readText().then(text => {
       this.lines = text.split('\n').map( (token,index) => new CustomLine(token,index,ChordType.NORMAL,false));
     });

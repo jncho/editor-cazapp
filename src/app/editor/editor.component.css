@@ -1,3 +1,26 @@
+:host{
+    display: grid;
+    height: 100%;
+    padding: 5px;
+    grid-template-rows: 50px auto 50px;
+    grid-template-areas: "metadata"
+                         "editor"
+                         "buttons";
+}
+
+#metadata{
+    grid-area: metadata;
+}
+
+#editor{
+    overflow-y: auto;
+    grid-area: editor;
+}
+
+#buttons-actions{
+    grid-area: buttons;
+}
+
 .title-input{
     border: none;
     font-family: "Lucida Console", "Courier New", monospace;
@@ -34,4 +57,8 @@ a{
 
 :host ::ng-deep .p-dropdown{
     width: 100% !important;
+}
+
+.lyric{
+    border: none;
 }
