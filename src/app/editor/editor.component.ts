@@ -1,0 +1,151 @@
+import { Component, HostListener } from '@angular/core';
+import * as internal from 'stream';
+import {ConfirmationService} from 'primeng/api';
+
+@Component({
+  selector: 'app-editor',
+  templateUrl: './editor.component.html',
+  styleUrls: ['./editor.component.css']
+})
+export class EditorComponent {
+  title?: string;
+  lines : CustomLine[] = [];
+  sections: string[] = ["section1","section2","section3"];
+  selectedSection?: string;
+
+
+  chordType = ChordType;
+  lastLineSelected?: CustomLine;
+
+  constructor(private confirmationService: ConfirmationService){}
+
+  setLastLineSelected(line?: CustomLine): void{
+    this.lastLineSelected = line;
+  }
+
+  addNextLine(idLine: number,text:string,type: ChordType){
+    let indexNewLine = this.lines.findIndex(line => line.id == idLine)+1;
+    this.lines.splice(indexNewLine,0,new CustomLine(text, this.lines.length, type,false));
+  }
+
+  addLine(text:string,type: ChordType): void{
+    this.lines.push(new CustomLine(text, this.lines.length, type,false));
+  }
+
+  deleteLine(line: CustomLine): void{
+    this.lines = this.lines.filter(l => l.id!=line.id);
+  }
+
+  clear():void{
+    this.confirmationService.confirm({
+      message: '¿Estás seguro?',
+      accept: () => {
+        this.title = undefined;
+        this.lines = [];
+        this.selectedSection = undefined;
+      }
+    });
+  }
+
+  createLinesFromClipboard(): void{
+    navigator.clipboard.readText().then(text => {
+      this.lines = text.split('\n').map( (token,index) => new CustomLine(token,index,ChordType.NORMAL,false));
+    });
+  }
+
+  songIsValid(): boolean{
+    let titleIsValid: boolean = (this.title != undefined) && (this.title.length!=0);
+    let sectionIsValid: boolean = (this.selectedSection != undefined)
+    let bodyIsValid: boolean = (this.lines.length >= 2)
+    return titleIsValid && sectionIsValid && bodyIsValid;
+  }
+
+  @HostListener('window:keydown.control.shift.v',['$event'])
+  createLinesFromClipboardShotcut(event: KeyboardEvent): void{
+    event.preventDefault();
+    this.createLinesFromClipboard();
+  }
+
+  @HostListener('window:keydown.control.a',['$event'])
+  addChord(event: KeyboardEvent){
+    event.preventDefault();
+    if (this.lastLineSelected != undefined){
+      this.addNextLine(this.lastLineSelected.id,'New Chord Line...',ChordType.CHORD)
+    }else{
+      this.addLine('New Chord Line...',ChordType.CHORD)
+    }
+  }
+
+  @HostListener('window:keydown.control.s',['$event'])
+  addNormal(event: KeyboardEvent){
+    event.preventDefault();
+    if (this.lastLineSelected != undefined){
+      this.addNextLine(this.lastLineSelected.id,'New Normal Line...',ChordType.NORMAL)
+    }else{
+      this.addLine('New Chord Line...',ChordType.NORMAL)
+    }
+  }
+
+  @HostListener('window:keydown.control.d',['$event'])
+  addChorus(event: KeyboardEvent){
+    event.preventDefault();
+    if (this.lastLineSelected != undefined){
+      this.addNextLine(this.lastLineSelected.id,'New Chorus Line...',ChordType.CHORUS)
+    }else{
+      this.addLine('New Chord Line...',ChordType.CHORUS)
+    }
+  }
+
+  @HostListener('window:keydown.control.r',['$event'])
+  removeLine(event: KeyboardEvent){
+    event.preventDefault();
+    if (this.lastLineSelected != undefined){
+      this.deleteLine(this.lastLineSelected);
+      this.lastLineSelected = undefined;
+    }
+  }
+
+  changeToType(event: KeyboardEvent,type: ChordType){
+    event.preventDefault();
+    if (this.lastLineSelected != undefined){
+      this.lastLineSelected.type = type;
+    }
+  }
+
+  @HostListener('window:keydown.alt.a',['$event'])
+  changeToChord(event: KeyboardEvent){
+    this.changeToType(event,ChordType.CHORD);
+  }
+  @HostListener('window:keydown.alt.s',['$event'])
+  changeToNormal(event: KeyboardEvent){
+    this.changeToType(event,ChordType.NORMAL);
+  }
+  @HostListener('window:keydown.alt.d',['$event'])
+  changeToChorus(event: KeyboardEvent){
+    this.changeToType(event,ChordType.CHORUS);
+  }
+}
+
+export class CustomLine {
+  content: string = "";
+  id: number = 0;
+  type: ChordType = ChordType.NORMAL;
+  marked: boolean = false;
+
+  constructor(content: string,id: number,type: ChordType,marked: boolean){
+    this.content = content;
+    this.id = id;
+    this.type = type;
+    this.marked = marked;
+  }
+
+  setMarked(marked: boolean): void{
+    this.marked = marked;
+  }
+}
+
+export enum ChordType {
+  NORMAL="normal",
+  CHORD="acorde",
+  CHORUS="estribillo"
+}

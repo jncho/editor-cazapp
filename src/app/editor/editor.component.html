@@ -1,0 +1,34 @@
+<div id="metadata" class="row m-0 sticky-top">
+  <input type="text" pInputText [(ngModel)]="title"  class="col-12 col-sm-9" placeholder="New Song Title...">
+  <p-dropdown [options]="sections" [(ngModel)]="selectedSection" placeholder="Select a Section" class="col-12 col-sm-3 p-0"></p-dropdown>
+</div>
+<div id="editor" class="row m-0">
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+  <div *ngFor="let line of lines">
+    <input type="text" pInputText [(ngModel)]="line.content" [class.marked]="line.marked" 
+      [class]="{ 'line-chord':line.type==chordType.CHORD, 'line-normal':line.type==chordType.NORMAL,'line-chorus':line.type==chordType.CHORUS}"
+      (focus)="setLastLineSelected(line);"
+      (focusout)="setLastLineSelected(undefined)">
+    <div>
+      <a (click)="deleteLine(line)" (mouseenter)="line.setMarked(true);" (mouseleave)="line.setMarked(false);" label="" class=""><i class="pi pi-trash" [ngStyle]="{color:'var(--pink-500)'}"></i></a>
+      <a (click)="addNextLine(line.id,'New Normal Line...',chordType.NORMAL)" label=""><i class="pi pi-plus" [ngStyle]="{color:'var(--green-500)'}"></i></a>
+    </div>
+  </div>
+
+</div>
+<div id="button-actions" class="row m-0 p-0 sticky-bottom">
+
+  <div ></div> 
+  <div >
+    <button pButton type="button" (click)="addLine('New Chord Line...',chordType.CHORD)" label="Chords" class="" icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+A" tooltipPosition="top"></button>
+    <button pButton type="button" (click)="addLine('New Normal Line...',chordType.NORMAL)" label="Normal" class="" icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+S" tooltipPosition="top"></button>
+    <button pButton type="button" (click)="addLine('New Chorus Line...',chordType.CHORUS)" label="Chorus" class=""  icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+D" tooltipPosition="top"></button>
+    <button pButton type="button" (click)="clear()" label="Clear" icon="pi pi-times" class="" iconPos="left"></button>
+    <button pButton type="button" (click)="createLinesFromClipboard()" label="Paste" icon="pi pi-copy" class="" iconPos="left"></button>
+    
+  </div>
+  <div >
+    <button pButton type="button" (click)="createLinesFromClipboard()" label="Request" icon="pi pi-check" class="" iconPos="left" [disabled]="!songIsValid()"></button>
+  </div>
+
+</div>

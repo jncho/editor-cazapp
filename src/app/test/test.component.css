@@ -1,0 +1,43 @@
+/* :host {
+    height: 100%;
+    display: grid;
+    grid-template-areas: "title"
+                         "content"
+                         "footer";
+    grid-template-rows: 2fr 20fr 2fr;
+}
+
+#title {
+    grid-area: title;
+    background-color: aqua;
+}
+
+#content {
+    grid-area: content;
+    background-color:blueviolet;
+}
+
+#footer {
+    grid-area: footer;
+    background-color: blue;
+} */
+
+:host{
+    height: 100%;
+}
+
+#title {
+    background-color: aqua;
+    height: 100px;
+}
+
+#content {
+    background-color:blueviolet;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+#footer {
+    background-color: blue;
+    height: 100px;
+}
