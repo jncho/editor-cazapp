@@ -4,8 +4,7 @@ import { EditorComponent } from './editor/editor.component';
 import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
-  { path: '',   redirectTo: '/cazapp-editor',pathMatch: 'full'},
-  { path: 'cazapp-editor', component: EditorComponent}
+  { path: '', component: EditorComponent},
 ];
 
 @NgModule({
