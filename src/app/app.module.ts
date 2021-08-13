@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {DropdownModule} from 'primeng/dropdown';
 import { TestComponent } from './test/test.component';
 import { EditorComponent } from './editor/editor.component';
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { EditorComponent } from './editor/editor.component';
     TooltipModule,
     ConfirmDialogModule,
     BrowserAnimationsModule,
-    DropdownModule
+    DropdownModule,
+    ToastModule
   ],
   providers: [ConfirmationService],
   bootstrap: [AppComponent]

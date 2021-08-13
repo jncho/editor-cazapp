@@ -2,16 +2,19 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import * as internal from 'stream';
 import {ConfirmationService} from 'primeng/api';
 import { Line, Song } from './models';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css']
+  styleUrls: ['./editor.component.css'],
+  providers: [MessageService]
 })
 export class EditorComponent implements OnInit{
   title?: string;
   lines : CustomLine[] = [];
-  sections: string[] = ["section1","section2","section3"];
+  sections: string[] = ["Accion de gracias","Adviento","Cuaresma","Don Bosco","Espíritu Santo","Himnos","Infantiles","María","Navidad","Pascua","Salmos y cánticos",
+"Semana santa","Varios","Vocacionales","Ampliación","Ampliación II"];
   selectedSection?: string;
 
   chordType = ChordType;
@@ -19,7 +22,7 @@ export class EditorComponent implements OnInit{
 
   dynamicDownload?: HTMLElement;
 
-  constructor(private confirmationService: ConfirmationService){}
+  constructor(private confirmationService: ConfirmationService, private messageService: MessageService){}
 
   ngOnInit(): void {
     this.dynamicDownload = document.createElement('a');
@@ -28,12 +31,16 @@ export class EditorComponent implements OnInit{
 
   downloadJson(): void {
     let song = this.createSong();
-    this.dynamicDownload?.setAttribute('href',`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(song))}`);
-    let filename = this.title!=undefined ? this.title?.trim().replace(/ +/g,"-") : 'custon-song';
-    this.dynamicDownload?.setAttribute('download',`${filename}.json`);
+    if (song.isValid()){
+      this.dynamicDownload?.setAttribute('href',`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(song))}`);
+      let filename = this.title!=undefined ? this.title?.trim().replace(/ +/g,"-") : 'custon-song';
+      this.dynamicDownload?.setAttribute('download',`${filename}.json`);
 
-    var event = new MouseEvent("click");
-    this.dynamicDownload?.dispatchEvent(event);
+      var event = new MouseEvent("click");
+      this.dynamicDownload?.dispatchEvent(event);
+    } else {
+      this.messageService.add({severity:'error', summary:'Error de formato', detail:'No se cumple el formato propueseto de la canción.'});
+    }
   }
 
   setLastLineSelected(line?: CustomLine): void{

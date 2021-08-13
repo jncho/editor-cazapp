@@ -10,6 +10,14 @@ export class Song{
         this._partition = _partition;
         this.body = body;
     }
+
+    isValid(): boolean {
+        return this.title!=null 
+                && this.section!=null 
+                && this._partition!=null 
+                && this.body!=null
+                && this.body.length>1;
+    };
 }
 
 export class Line{
