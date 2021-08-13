@@ -5,7 +5,7 @@ import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
   { path: '',   component: EditorComponent}
-];
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -18,7 +18,7 @@ import {ToastModule} from 'primeng/toast';
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent,
+    TestComponent,  
     EditorComponent
   ],
   imports: [
