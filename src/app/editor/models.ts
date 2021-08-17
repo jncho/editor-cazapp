@@ -1,14 +1,14 @@
 export class Song{
     title?: string;
+    body?: Line[];
     section?: string;
     _partition?: string;
-    body?: Line[];
 
-    constructor(title?: string,section?: string,_partition?: string,body?: Line[]){
+    constructor(title?: string, body?: Line[], section?: string, _partition?: string){
         this.title = title;
+        this.body = body;
         this.section = section;
         this._partition = _partition;
-        this.body = body;
     }
 
     isValid(): boolean {

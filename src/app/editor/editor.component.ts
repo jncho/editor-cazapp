@@ -51,13 +51,13 @@ export class EditorComponent implements OnInit{
     let song = new Song();
 
     song.title = this.title;
-    song.section = this.selectedSection;
-    song._partition = "PUBLIC";
     song.body = [];
     for (let i=0 ; i<this.lines.length ; i++) {
       let customLine = this.lines[i];
       song.body.push(new Line(i+1,customLine.type,customLine.content));
     }
+    song.section = this.selectedSection;
+    song._partition = "Public Songs";
 
     return song;
   }

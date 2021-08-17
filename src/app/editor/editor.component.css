@@ -58,7 +58,3 @@ a{
 :host ::ng-deep .p-dropdown{
     width: 100% !important;
 }
-
-.lyric{
-    border: none;
-}
