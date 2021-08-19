@@ -14,12 +14,16 @@ import {DropdownModule} from 'primeng/dropdown';
 import { TestComponent } from './test/test.component';
 import { EditorComponent } from './editor/editor.component';
 import {ToastModule} from 'primeng/toast';
+import {DialogModule} from 'primeng/dialog';
+import { HelpComponent } from './editor/help/help.component';
+import {FieldsetModule} from 'primeng/fieldset';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestComponent,  
-    EditorComponent
+    EditorComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,9 @@ import {ToastModule} from 'primeng/toast';
     ConfirmDialogModule,
     BrowserAnimationsModule,
     DropdownModule,
-    ToastModule
+    ToastModule,
+    DialogModule,
+    FieldsetModule
   ],
   providers: [ConfirmationService],
   bootstrap: [AppComponent]

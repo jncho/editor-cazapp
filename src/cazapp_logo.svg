@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg4585"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="cazapp_logo_2.svg">
+  <defs
+     id="defs4579" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="465.80475"
+     inkscape:cy="793.82801"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-grids="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1272"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4582">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="fondo"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#b4d76b;fill-opacity:1;stroke:#b4d76b;stroke-width:0.4;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal;stroke-linecap:butt"
+       id="rect4599"
+       width="69.346626"
+       height="68.688614"
+       x="81.649658"
+       y="51.768867" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="logo">
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.88099998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 133.47217,75.800852 6.61493,-6.748558 c 0,0 -7.41137,-10.441469 -23.11882,-10.824413 -9.19091,-0.224072 -18.791383,6.794678 -23.252451,14.833457 -4.193475,7.55658 -3.613777,18.248405 -0.26727,25.925137 5.479921,12.570675 16.731571,16.835635 26.058781,16.036175 10.59731,-0.97898 17.50615,-7.61718 20.78021,-12.62848 l -7.2831,-6.709414 c 0,0 -4.62561,8.493904 -14.16528,9.582564 -3.3378,0.38089 -17.27818,-0.39044 -17.84024,-16.837982 -0.24186,-7.077479 2.03226,-17.201077 12.2944,-19.978398 12.26291,-3.318807 20.17884,7.349912 20.17884,7.349912 z"
+       id="path3742"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cssascccsssc" />
+    <path
+       style="fill:#f9fcf3;fill-opacity:1;stroke:#000000;stroke-width:1.13202894;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 105.54704,74.218939 29.37065,7.784408 v 7.848799 l -29.43201,10.1341 -3.60814,-6.08598 16.85145,-4.807964 0.14454,-5.472549 -16.86236,-3.368876 z"
+       id="path3744"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc" />
+    <path
+       style="fill:#b4d76b;fill-opacity:1;stroke:#000000;stroke-width:1.13202894;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 122.37732,84.106658 v 4.204457 l 7.118,-2.162294 z"
+       id="path3746"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

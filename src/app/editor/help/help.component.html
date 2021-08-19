@@ -1,0 +1,7 @@
+<p-dialog [header]="title" [(visible)]="display" [modal]="true">
+    <div class="container row">
+        <p-fieldset *ngFor="let command of commands" [legend]="command.key" class="col-6">
+            <p [innerHTML]="command.desc"></p>
+        </p-fieldset>
+    </div>
+</p-dialog>

@@ -28,6 +28,7 @@
     "primeng": "^11.4.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "uuid": "^8.3.2",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "@angular/compiler-cli": "~11.2.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
+    "@types/uuid": "^8.3.1",
     "angular-cli-ghpages": "^1.0.0-rc.2",
     "codelyzer": "^6.0.0",
     "jasmine-core": "~3.6.0",

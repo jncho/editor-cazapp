@@ -3,6 +3,7 @@ import * as internal from 'stream';
 import {ConfirmationService} from 'primeng/api';
 import { Line, Song } from './models';
 import {MessageService} from 'primeng/api';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-editor',
@@ -16,11 +17,10 @@ export class EditorComponent implements OnInit{
   sections: string[] = ["Accion de gracias","Adviento","Cuaresma","Don Bosco","Espíritu Santo","Himnos","Infantiles","María","Navidad","Pascua","Salmos y cánticos",
 "Semana santa","Varios","Vocacionales","Ampliación","Ampliación II"];
   selectedSection?: string;
-
   chordType = ChordType;
   lastLineSelected?: CustomLine;
-
   dynamicDownload?: HTMLElement;
+  displayHelp: boolean = false;
 
   constructor(private confirmationService: ConfirmationService, private messageService: MessageService){}
 
@@ -62,13 +62,13 @@ export class EditorComponent implements OnInit{
     return song;
   }
 
-  addNextLine(idLine: number,text:string,type: ChordType){
-    let indexNewLine = this.lines.findIndex(line => line.id == idLine)+1;
-    this.lines.splice(indexNewLine,0,new CustomLine(text, this.lines.length, type,false));
+  addNextLine(idLine: string,text:string,type: ChordType){
+    let indexNewLine = this.lines.findIndex(line => line.id == idLine);
+    this.lines.splice(indexNewLine,0,new CustomLine(text, type,false));
   }
 
   addLine(text:string,type: ChordType): void{
-    this.lines.push(new CustomLine(text, this.lines.length, type,false));
+    this.lines.push(new CustomLine(text, type,false));
   }
 
   deleteLine(line: CustomLine): void{
@@ -79,9 +79,7 @@ export class EditorComponent implements OnInit{
     this.confirmationService.confirm({
       message: '¿Estás seguro?',
       accept: () => {
-        this.title = undefined;
         this.lines = [];
-        this.selectedSection = undefined;
       }
     });
   }
@@ -89,10 +87,12 @@ export class EditorComponent implements OnInit{
   createLinesFromClipboard(): void{
     // Firefox -> Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0
     // Chrome -> Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 
-    console.log(window.navigator.userAgent);
+    console.log(this.lastLineSelected);
    
     navigator.clipboard.readText().then(text => {
-      this.lines = text.split('\n').map( (token,index) => new CustomLine(token,index,ChordType.NORMAL,false));
+      let newLines = text.split('\n').map( (token,_) => new CustomLine(token,ChordType.NORMAL,false));
+      let indexNewLine = this.lines.findIndex(line => line.id == this.lastLineSelected?.id)+1;
+      this.lines.splice(indexNewLine,0,...newLines);
     });
   }
 
@@ -101,6 +101,10 @@ export class EditorComponent implements OnInit{
     let sectionIsValid: boolean = (this.selectedSection != undefined)
     let bodyIsValid: boolean = (this.lines.length >= 2)
     return titleIsValid && sectionIsValid && bodyIsValid;
+  }
+
+  showHelp(): void{
+    this.displayHelp=true;
   }
 
   @HostListener('window:keydown.control.shift.v',['$event'])
@@ -171,13 +175,13 @@ export class EditorComponent implements OnInit{
 
 export class CustomLine {
   content: string = "";
-  id: number = 0;
+  id: string = "";
   type: ChordType = ChordType.NORMAL;
   marked: boolean = false;
 
-  constructor(content: string,id: number,type: ChordType,marked: boolean){
+  constructor(content: string,type: ChordType,marked: boolean){
+    this.id = uuid.v4();
     this.content = content;
-    this.id = id;
     this.type = type;
     this.marked = marked;
   }

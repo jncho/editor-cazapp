@@ -1,8 +1,8 @@
 <div id="metadata">
   <p-toast></p-toast>
   <div class="d-flex">
-    <input type="text" class="flex-grow-1" pInputText [(ngModel)]="title"  placeholder="New Song Title...">
-    <p-dropdown [options]="sections" [(ngModel)]="selectedSection" placeholder="Select a Section"></p-dropdown>
+    <input type="text" class="flex-grow-1" pInputText [(ngModel)]="title"  placeholder="Nuevo titulo...">
+    <p-dropdown [options]="sections" [(ngModel)]="selectedSection" placeholder="Selecciona una categoría"></p-dropdown>
   </div>
 </div>
 <div id="editor">
@@ -15,24 +15,28 @@
         class="flex-grow-1 line-input">
       <div>
       <a class="mx-2" (click)="deleteLine(line)" (mouseenter)="line.setMarked(true);" (mouseleave)="line.setMarked(false);" label=""><i class="pi pi-trash" [ngStyle]="{color:'var(--pink-500)'}"></i></a>
-      <a class="mx-2" (click)="addNextLine(line.id,'New Normal Line...',chordType.NORMAL)" label=""><i class="pi pi-plus" [ngStyle]="{color:'var(--green-500)'}"></i></a>
+      <a class="mx-2" (click)="addNextLine(line.id,'New Normal Line...',chordType.NORMAL)" (mouseenter)="line.setMarked(true);" (mouseleave)="line.setMarked(false);" label=""><i class="pi pi-plus" [ngStyle]="{color:'var(--green-500)'}"></i></a>
     </div>
   </div>
-
+  <app-help [(display)]="displayHelp"></app-help>
 </div>
 <div id="button-actions">
 
   <div class="d-flex justify-content-between">
     <div >
-      <button pButton type="button" (click)="addLine('New Chord Line...',chordType.CHORD)" label="Chords" class="mx-1" icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+A" tooltipPosition="top"></button>
-      <button pButton type="button" (click)="addLine('New Normal Line...',chordType.NORMAL)" label="Normal" class="mx-1" icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+S" tooltipPosition="top"></button>
-      <button pButton type="button" (click)="addLine('New Chorus Line...',chordType.CHORUS)" label="Chorus" class="mx-1"  icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+D" tooltipPosition="top"></button>
-      <button pButton type="button" (click)="clear()" label="Clear" icon="pi pi-times" class="mx-1" iconPos="left"></button>
-      <button pButton type="button" (click)="createLinesFromClipboard()" label="Paste" icon="pi pi-copy" class="mx-1" iconPos="left"></button>
-      
+      <span class="p-buttonset">
+        <button pButton type="button" (click)="addLine('Nueva linea de acordes...',chordType.CHORD)" class="p-button-secondary" label="Acordes"  icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+A" tooltipPosition="top"></button>
+        <button pButton type="button" (click)="addLine('Nueva linea de letra normal...',chordType.NORMAL)" class="p-button-secondary" label="Normal"  icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+S" tooltipPosition="top"></button>
+        <button pButton type="button" (click)="addLine('Nueva linea de letra para estribillo...',chordType.CHORUS)" class="p-button-secondary" label="Estribillo"   icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+D" tooltipPosition="top"></button>
+      </span>
+      <span class="p-buttonset">
+        <button pButton type="button" (click)="clear()" label="Limpiar" icon="pi pi-times" class="p-ml-2 p-button-danger" iconPos="left"></button>
+        <button pButton type="button" (click)="createLinesFromClipboard()" label="Pegar" class="p-button-warning" icon="pi pi-copy" iconPos="left" pTooltip="Ctrl+Shift+V" tooltipPosition="top"></button>
+      </span>
     </div>
     <div >
-      <button pButton type="button" (click)="downloadJson()" label="Request" icon="pi pi-check" class="" iconPos="left" [disabled]="!songIsValid()"></button>
+      <button pButton type="button" (click)="showHelp()" label="Ayuda" icon="pi pi-info-circle" class="mx-1 p-button-help" iconPos="left"></button>
+      <button pButton type="button" (click)="downloadJson()" label="Guardar" icon="pi pi-check" class="p-button-success" iconPos="left" [disabled]="!songIsValid()"></button>
     </div>
   </div> 
 
