@@ -18,6 +18,7 @@ export class EditorComponent implements OnInit{
 "Semana santa","Varios","Vocacionales","Ampliación","Ampliación II"];
   selectedSection?: string;
   chordType = ChordType;
+  lastLineSelectedBackup?: CustomLine;
   lastLineSelected?: CustomLine;
   dynamicDownload?: HTMLElement;
   displayHelp: boolean = false;
@@ -44,7 +45,15 @@ export class EditorComponent implements OnInit{
   }
 
   setLastLineSelected(line?: CustomLine): void{
+    if (line?.id != this.lastLineSelected?.id){
+      this.lastLineSelectedBackup = this.lastLineSelected;
+    }
     this.lastLineSelected = line;
+  }
+
+  clearLastLineSelected(): void{
+    this.lastLineSelectedBackup = this.lastLineSelected;
+    this.lastLineSelected = undefined;
   }
 
   createSong(): Song{
@@ -62,17 +71,14 @@ export class EditorComponent implements OnInit{
     return song;
   }
 
-  addNextLine(idLine: string,text:string,type: ChordType){
+  addLine(text:string,type: ChordType,idLine?: string){
+    let newSong = new CustomLine(text, type,false);
     let indexNewLine = this.lines.findIndex(line => line.id == idLine);
-    this.lines.splice(indexNewLine,0,new CustomLine(text, type,false));
-  }
-
-  addLine(text:string,type: ChordType): void{
-    this.lines.push(new CustomLine(text, type,false));
-  }
-
-  deleteLine(line: CustomLine): void{
-    this.lines = this.lines.filter(l => l.id!=line.id);
+    if (indexNewLine == -1){
+      this.lines.push(newSong);
+    } else{
+      this.lines.splice(indexNewLine,0,newSong);
+    }
   }
 
   clear():void{
@@ -81,18 +87,6 @@ export class EditorComponent implements OnInit{
       accept: () => {
         this.lines = [];
       }
-    });
-  }
-
-  createLinesFromClipboard(): void{
-    // Firefox -> Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0
-    // Chrome -> Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 
-    console.log(this.lastLineSelected);
-   
-    navigator.clipboard.readText().then(text => {
-      let newLines = text.split('\n').map( (token,_) => new CustomLine(token,ChordType.NORMAL,false));
-      let indexNewLine = this.lines.findIndex(line => line.id == this.lastLineSelected?.id)+1;
-      this.lines.splice(indexNewLine,0,...newLines);
     });
   }
 
@@ -107,55 +101,70 @@ export class EditorComponent implements OnInit{
     this.displayHelp=true;
   }
 
-  @HostListener('window:keydown.control.shift.v',['$event'])
-  createLinesFromClipboardShotcut(event: KeyboardEvent): void{
-    event.preventDefault();
-    this.createLinesFromClipboard();
+  // Click Butons
+  createLinesFromClipboard(): void{
+    navigator.clipboard.readText().then(text => {
+      let newLines = text.split('\n').map( (token,_) => new CustomLine(token,ChordType.NORMAL,false));
+      let insertIndex = this.lastLineSelected != undefined ? this.lastLineSelected.id : this.lastLineSelectedBackup?.id;
+      let indexNewLine = this.lines.findIndex(line => line.id == insertIndex)+1;
+      this.lines.splice(indexNewLine,0,...newLines);
+    });
   }
 
-  @HostListener('window:keydown.control.a',['$event'])
-  addChord(event: KeyboardEvent){
-    event.preventDefault();
-    if (this.lastLineSelected != undefined){
-      this.addNextLine(this.lastLineSelected.id,'New Chord Line...',ChordType.CHORD)
-    }else{
-      this.addLine('New Chord Line...',ChordType.CHORD)
-    }
+  addChord(): void{
+    this.addLine('New Chord Line...',ChordType.CHORD,this.lastLineSelected?.id);
   }
 
-  @HostListener('window:keydown.control.s',['$event'])
-  addNormal(event: KeyboardEvent){
-    event.preventDefault();
-    if (this.lastLineSelected != undefined){
-      this.addNextLine(this.lastLineSelected.id,'New Normal Line...',ChordType.NORMAL)
-    }else{
-      this.addLine('New Chord Line...',ChordType.NORMAL)
-    }
+  addNormal(): void{
+      this.addLine('New Normal Line...',ChordType.NORMAL,this.lastLineSelected?.id);
   }
 
-  @HostListener('window:keydown.control.d',['$event'])
-  addChorus(event: KeyboardEvent){
-    event.preventDefault();
-    if (this.lastLineSelected != undefined){
-      this.addNextLine(this.lastLineSelected.id,'New Chorus Line...',ChordType.CHORUS)
-    }else{
-      this.addLine('New Chord Line...',ChordType.CHORUS)
-    }
-  }
-
-  @HostListener('window:keydown.control.r',['$event'])
-  removeLine(event: KeyboardEvent){
-    event.preventDefault();
-    if (this.lastLineSelected != undefined){
-      this.deleteLine(this.lastLineSelected);
-      this.lastLineSelected = undefined;
-    }
+  addChorus(): void{
+      this.addLine('New Chorus Line...',ChordType.CHORUS,this.lastLineSelected?.id);
   }
 
   changeToType(event: KeyboardEvent,type: ChordType){
     event.preventDefault();
     if (this.lastLineSelected != undefined){
       this.lastLineSelected.type = type;
+    }
+  }
+
+  deleteLine(line: CustomLine): void{
+    this.lines = this.lines.filter(l => l.id!=line.id);
+  }
+
+  // Keyboard Shortcuts
+  @HostListener('window:keydown.control.shift.v',['$event'])
+  createLinesFromClipboardShortcut(event: KeyboardEvent): void{
+    event.preventDefault();
+    this.createLinesFromClipboard();
+  }
+
+  @HostListener('window:keydown.control.a',['$event'])
+  addChordShortcut(event: KeyboardEvent){
+    event.preventDefault();
+    this.addChord();
+  }
+
+  @HostListener('window:keydown.control.s',['$event'])
+  addNormalShortcut(event: KeyboardEvent){
+    event.preventDefault();
+    this.addNormal();
+  }
+
+  @HostListener('window:keydown.control.d',['$event'])
+  addChorusShortcut(event: KeyboardEvent){
+    event.preventDefault();
+    this.addChorus();
+  }
+
+  @HostListener('window:keydown.control.r',['$event'])
+  removeLineShortcut(event: KeyboardEvent){
+    event.preventDefault();
+    if (this.lastLineSelected != undefined){
+      this.deleteLine(this.lastLineSelected);
+      this.lastLineSelected = undefined;
     }
   }
 
