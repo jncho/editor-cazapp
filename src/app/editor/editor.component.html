@@ -11,7 +11,7 @@
       <input type="text" pInputText [(ngModel)]="line.content" [class.marked]="line.marked" 
         [class]="{ 'line-chord':line.type==chordType.CHORD, 'line-normal':line.type==chordType.NORMAL,'line-chorus':line.type==chordType.CHORUS}"
         (focus)="setLastLineSelected(line);"
-        (focusout)="setLastLineSelected(undefined)"
+        (focusout)="clearLastLineSelected()"
         class="flex-grow-1 line-input">
       <div>
       <a class="mx-2" (click)="deleteLine(line)" (mouseenter)="line.setMarked(true);" (mouseleave)="line.setMarked(false);" label=""><i class="pi pi-trash" [ngStyle]="{color:'var(--pink-500)'}"></i></a>
