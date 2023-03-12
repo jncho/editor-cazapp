@@ -1,21 +1,48 @@
 <div id="metadata">
   <p-toast></p-toast>
+  <div *ngIf="isInvalidResult != undefined">
+    <p-dialog [header]="!isInvalidResult ? '' : isInvalidResult.msg" [(visible)]="displayErrors" [style]="{width: '50vw'}"
+    [baseZIndex]="10000">
+    <div class="bg-danger p-1 m-1 text-light" *ngFor="let lineChord of isInvalidResult.invalidChords">
+      <p class="fs-5">
+        Linea {{lineChord.line.line}}:
+        <span *ngFor="let chord of lineChord.chords; index as i">
+          <span *ngIf="i==0">
+            {{chord}}
+          </span>
+          <span *ngIf="i != 0">
+            , {{chord}}
+          </span>
+
+        </span>
+      </p>
+    </div>
+    <div class="alert alert-primary fs-6" role="alert"><i class="pi pi-info-circle"></i>  Puedes obtener más información sobre el formato de los acordes en el apartado de Ayuda</div>
+    <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="displayErrors=false" label="Ok" styleClass="p-button-text"></p-button>
+    </ng-template>
+  </p-dialog>
+  </div>
+  
   <div class="d-flex">
-    <input type="text" class="flex-grow-1" pInputText [(ngModel)]="title"  placeholder="Nuevo titulo...">
+    <input type="text" class="flex-grow-1" pInputText [(ngModel)]="title" placeholder="Nuevo titulo...">
     <p-dropdown [options]="sections" [(ngModel)]="selectedSection" placeholder="Selecciona una categoría"></p-dropdown>
   </div>
 </div>
 <div id="editor">
   <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-    <div *ngFor="let line of lines" class="d-flex align-items-center">
-      <input type="text" pInputText [(ngModel)]="line.content" [class.marked]="line.marked" 
-        [class]="{ 'line-chord':line.type==chordType.CHORD, 'line-normal':line.type==chordType.NORMAL,'line-chorus':line.type==chordType.CHORUS}"
-        (focus)="setLastLineSelected(line);"
-        (focusout)="clearLastLineSelected()"
-        class="flex-grow-1 line-input">
-      <div>
-      <a class="mx-2" (click)="deleteLine(line)" (mouseenter)="line.setMarked(true);" (mouseleave)="line.setMarked(false);" label=""><i class="pi pi-trash" [ngStyle]="{color:'var(--pink-500)'}"></i></a>
-      <a class="mx-2" (click)="addLine('New Normal Line...',chordType.NORMAL,line.id)" (mouseenter)="line.setMarked(true);" (mouseleave)="line.setMarked(false);" label=""><i class="pi pi-plus" [ngStyle]="{color:'var(--green-500)'}"></i></a>
+  <div *ngFor="let line of lines; index as i" class="d-flex align-items-center">
+    <span style="width: 30px">{{i+1}}</span>
+    <input type="text" pInputText [(ngModel)]="line.content" [class.marked]="line.marked"
+      [class]="{ 'line-chord':line.type==chordType.CHORD, 'line-normal':line.type==chordType.NORMAL,'line-chorus':line.type==chordType.CHORUS}"
+      (focus)="setLastLineSelected(line);" (focusout)="clearLastLineSelected()" class="flex-grow-1 line-input">
+    <div>
+      <a class="mx-2" (click)="deleteLine(line)" (mouseenter)="line.setMarked(true);"
+        (mouseleave)="line.setMarked(false);" label=""><i class="pi pi-trash"
+          [ngStyle]="{color:'var(--pink-500)'}"></i></a>
+      <a class="mx-2" (click)="addLine('New Normal Line...',chordType.NORMAL,line.id)"
+        (mouseenter)="line.setMarked(true);" (mouseleave)="line.setMarked(false);" label=""><i class="pi pi-plus"
+          [ngStyle]="{color:'var(--green-500)'}"></i></a>
     </div>
   </div>
   <app-help [(display)]="displayHelp"></app-help>
@@ -23,21 +50,28 @@
 <div id="button-actions">
 
   <div class="d-flex justify-content-between">
-    <div >
+    <div>
       <span class="p-buttonset">
-        <button pButton type="button" (click)="addChord()" class="p-button-secondary" label="Acordes"  icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+A" tooltipPosition="top"></button>
-        <button pButton type="button" (click)="addNormal()" class="p-button-secondary" label="Normal"  icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+S" tooltipPosition="top"></button>
-        <button pButton type="button" (click)="addChorus()" class="p-button-secondary" label="Estribillo"   icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+D" tooltipPosition="top"></button>
+        <button pButton type="button" (click)="addChord()" class="p-button-secondary" label="Acordes" icon="pi pi-plus"
+          iconPos="left" pTooltip="Ctrl+A" tooltipPosition="top"></button>
+        <button pButton type="button" (click)="addNormal()" class="p-button-secondary" label="Normal" icon="pi pi-plus"
+          iconPos="left" pTooltip="Ctrl+S" tooltipPosition="top"></button>
+        <button pButton type="button" (click)="addChorus()" class="p-button-secondary" label="Estribillo"
+          icon="pi pi-plus" iconPos="left" pTooltip="Ctrl+D" tooltipPosition="top"></button>
       </span>
       <span class="p-buttonset">
-        <button pButton type="button" (click)="clear()" label="Limpiar" icon="pi pi-times" class="p-ml-2 p-button-danger" iconPos="left"></button>
-        <button pButton type="button" (click)="createLinesFromClipboard()" label="Pegar" class="p-button-warning" icon="pi pi-copy" iconPos="left" pTooltip="Ctrl+Shift+V" tooltipPosition="top"></button>
+        <button pButton type="button" (click)="clear()" label="Limpiar" icon="pi pi-times"
+          class="p-ml-2 p-button-danger" iconPos="left"></button>
+        <button pButton type="button" (click)="createLinesFromClipboard()" label="Pegar" class="p-button-warning"
+          icon="pi pi-copy" iconPos="left" pTooltip="Ctrl+Shift+V" tooltipPosition="top"></button>
       </span>
     </div>
-    <div >
-      <button pButton type="button" (click)="showHelp()" label="Ayuda" icon="pi pi-info-circle" class="mx-1 p-button-help" iconPos="left"></button>
-      <button pButton type="button" (click)="downloadJson()" label="Guardar" icon="pi pi-check" class="p-button-success" iconPos="left" [disabled]="!songIsValid()"></button>
+    <div>
+      <button pButton type="button" (click)="showHelp()" label="Ayuda" icon="pi pi-info-circle"
+        class="mx-1 p-button-help" iconPos="left"></button>
+      <button pButton type="button" (click)="downloadJson()" label="Guardar" icon="pi pi-check" class="p-button-success"
+        iconPos="left" [disabled]="!songIsValid()"></button>
     </div>
-  </div> 
+  </div>
 
 </div>

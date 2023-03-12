@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import * as internal from 'stream';
 import {ConfirmationService} from 'primeng/api';
-import { Line, Song } from './models';
+import { InvalidResult, Line, Song } from './models';
 import {MessageService} from 'primeng/api';
 import * as uuid from 'uuid';
 
@@ -22,6 +22,8 @@ export class EditorComponent implements OnInit{
   lastLineSelected?: CustomLine;
   dynamicDownload?: HTMLElement;
   displayHelp: boolean = false;
+  displayErrors: boolean = false;
+  isInvalidResult?: InvalidResult;
 
   constructor(private confirmationService: ConfirmationService, private messageService: MessageService){}
 
@@ -32,8 +34,8 @@ export class EditorComponent implements OnInit{
 
   downloadJson(): void {
     let song = this.createSong();
-    let isInvalid = song.isInvalid();
-    if (!isInvalid){
+    this.isInvalidResult = song.isInvalid();
+    if (!this.isInvalidResult){
       this.dynamicDownload?.setAttribute('href',`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(song))}`);
       let filename = this.title!=undefined ? this.title?.trim().replace(/ +/g,"-") : 'custon-song';
       this.dynamicDownload?.setAttribute('download',`${filename}.json`);
@@ -41,8 +43,11 @@ export class EditorComponent implements OnInit{
       var event = new MouseEvent("click");
       this.dynamicDownload?.dispatchEvent(event);
     } else {
-      this.messageService.add({severity:'error', summary:'Error de formato', detail:`${isInvalid.msg}`});
-      //TODO Show errors in front end
+      if (this.isInvalidResult.invalidChords.length == 0){
+        this.messageService.add({severity:'error', summary:'Error de formato', detail:`${this.isInvalidResult.msg}`});
+      } else {
+        this.displayErrors = true;
+      }
     }
   }
 
@@ -114,15 +119,15 @@ export class EditorComponent implements OnInit{
   }
 
   addChord(): void{
-    this.addLine('New Chord Line...',ChordType.CHORD,this.lastLineSelected?.id);
+    this.addLine('Nueva linea de acordes...',ChordType.CHORD,this.lastLineSelected?.id);
   }
 
   addNormal(): void{
-      this.addLine('New Normal Line...',ChordType.NORMAL,this.lastLineSelected?.id);
+      this.addLine('Nueva linea de letra...',ChordType.NORMAL,this.lastLineSelected?.id);
   }
 
   addChorus(): void{
-      this.addLine('New Chorus Line...',ChordType.CHORUS,this.lastLineSelected?.id);
+      this.addLine('Nueva linea de letra de estribillo...',ChordType.CHORUS,this.lastLineSelected?.id);
   }
 
   changeToType(event: KeyboardEvent,type: ChordType){

@@ -1,7 +1,38 @@
-<p-dialog [header]="title" [(visible)]="display" [modal]="true">
-    <div class="container row">
-        <p-fieldset *ngFor="let command of commands" [legend]="command.key" class="col-6">
-            <p [innerHTML]="command.desc"></p>
-        </p-fieldset>
-    </div>
+<p-dialog id="help-dialog" header="Ayuda" [(visible)]="display" [modal]="true" [style]="{width: '80vw', height: '100vh'}">
+    <p-tabView>
+        <p-tabPanel header="Atajos">
+            <p-table [value]="commands" styleClass="p-datatable-sm">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 150px">Combinación</th>
+                        <th>Descripción</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-command>
+                    <tr>
+                        <td><code>{{command.key}}</code></td>
+                        <td><span [innerHTML]="command.desc"></span></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+         </p-tabPanel>
+         <p-tabPanel header="Formato Acordes">
+             <h3>Mayores</h3>
+             <p>Los acordes mayores deben estar escritos en MAYÚSCULAS.</p>
+             <p class="p-text-italic">Ej: DO, MIb, SI, RE#</p>
+
+             <h3>Menores</h3>
+             <p>Los acordes menores deben estar escritos en MINÚSCULAS.</p>
+             <p class="p-text-italic">Ej: do, sib, fa, reb</p>
+
+             <h3>Intervalos añadidos</h3>
+             <p>Los acordes alterados deben indicar a continuación del acorde el intervalo añadido.</p>
+             <p class="p-text-italic">Ej: do7 (Do menor con séptima), LA9 (La mayor con novena)</p>
+
+             <h3>Acordes con bajo</h3>
+             <p>Se puede indicar la nota de bajo en un acorde.</p>
+             <p class="p-text-italic">Ej: RE/FA#, LAb/DO, DO/MI</p>
+         </p-tabPanel>
+        
+    </p-tabView>
 </p-dialog>

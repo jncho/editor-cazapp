@@ -17,6 +17,8 @@ import {ToastModule} from 'primeng/toast';
 import {DialogModule} from 'primeng/dialog';
 import { HelpComponent } from './editor/help/help.component';
 import {FieldsetModule} from 'primeng/fieldset';
+import {TabViewModule} from 'primeng/tabview';
+import {TableModule} from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import {FieldsetModule} from 'primeng/fieldset';
     DropdownModule,
     ToastModule,
     DialogModule,
-    FieldsetModule
+    FieldsetModule,
+    TabViewModule,
+    TableModule
   ],
   providers: [ConfirmationService],
   bootstrap: [AppComponent]

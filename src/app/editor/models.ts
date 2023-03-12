@@ -11,9 +11,9 @@ export class Song{
         this._partition = _partition;
     }
 
-    isInvalid(): InvalidResult|null {
-        if (this.title!=null && this.section!=null && this._partition!=null && this.body!=null && this.body.length>1){
-            return {msg: 'Field title, section or body empty'};
+    isInvalid(): InvalidResult|undefined {
+        if (!this.title || !this.section || !this._partition || !this.body || this.body.length==0){
+            return {msg: 'Campos título, categoría o cuerpo vacios', invalidChords: []};
         }
 
         let invalidLines = [];
@@ -22,7 +22,7 @@ export class Song{
             let chords = line.content!!.split(' ').filter(x => x !== '')
             let invalidChords = []
             for (let chord of chords) {
-                let regex = /^(do|re|mi|fa|sol|la|si)(#|b)?([0-9]){0,2}(\/(do|re|mi|fa|sol|la|si)(#|b)?([0-9]){0,2})?$/i
+                let regex = /^(do|re|mi|fa|sol|la|si|DO|RE|MI|FA|SOL|LA|SI)(#|b)?([0-9]){0,2}(\/(do|re|mi|fa|sol|la|si|DO|RE|MI|FA|SOL|LA|SI)(#|b|B)?([0-9]){0,2})?$/
                 if (!chord.match(regex)){
                     invalidChords.push(chord);
                 }
@@ -33,20 +33,19 @@ export class Song{
         }
 
         if (invalidLines.length != 0){
-            console.log('Error of validation in chord lines');
-            return {msg: 'Chords with wrong format', invalidChords: invalidLines};
+            return {msg: 'Acordes con formato incorrecto', invalidChords: invalidLines};
         }
 
-        return null;
+        return undefined;
     };
 }
 
-interface InvalidResult {
+export interface InvalidResult {
     msg: string,
-    invalidChords?: InvalidChord[]
+    invalidChords: InvalidChord[]
 }
 
-interface InvalidChord {
+export interface InvalidChord {
     line: Line,
     chords: string[]
 }

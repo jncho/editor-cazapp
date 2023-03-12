@@ -29,6 +29,8 @@
 
 .line-input{
     border: none;
+    border-left: solid lightgray;
+    border-radius: 0;
     margin-right: 5px;
     font-family: "Lucida Console", "Courier New", monospace;
 }

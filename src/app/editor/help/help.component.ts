@@ -21,7 +21,6 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     @Output() displayChange = new EventEmitter<boolean>();
 
     // Atributtes
-    title = "Commands";
     commands = [
         { key: "Ctrl+A", desc:"<b>Añade una linea de acordes</b> delante de aquella linea en el que tengas el cursor." },
         { key: "Ctrl+S", desc:"<b>Añade una linea de letra delante</b> de aquella linea en el que tengas el cursor." },
