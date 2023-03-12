@@ -32,7 +32,8 @@ export class EditorComponent implements OnInit{
 
   downloadJson(): void {
     let song = this.createSong();
-    if (song.isValid()){
+    let isInvalid = song.isInvalid();
+    if (!isInvalid){
       this.dynamicDownload?.setAttribute('href',`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(song))}`);
       let filename = this.title!=undefined ? this.title?.trim().replace(/ +/g,"-") : 'custon-song';
       this.dynamicDownload?.setAttribute('download',`${filename}.json`);
@@ -40,7 +41,8 @@ export class EditorComponent implements OnInit{
       var event = new MouseEvent("click");
       this.dynamicDownload?.dispatchEvent(event);
     } else {
-      this.messageService.add({severity:'error', summary:'Error de formato', detail:'No se cumple el formato propueseto de la canción.'});
+      this.messageService.add({severity:'error', summary:'Error de formato', detail:`${isInvalid.msg}`});
+      //TODO Show errors in front end
     }
   }
 
